@@ -2,9 +2,11 @@ const express = require('express');
 const validator = require('express-validator');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const cookieSession = require('cookie-session');
+// const cookieSession = require('cookie-session');
+const morgan = require('morgan');
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 require('./models/user');
 
@@ -17,7 +19,8 @@ mongoose.connect(keys.mongoURI);
 require('./services/passport')(passport);
 // app.use weirs up middleware.
 
-// Parse any request with a body, and put the body inside req.body
+app.use(morgan('dev'));
+app.use(cookieParser());
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
