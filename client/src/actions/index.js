@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { FETCH_USER } from './types';
 
-export const fetchUser = () => async dispatch => { // redux-thunk allows to receive an function and executes it.
-		const res = await axios.get('/api/current_user');
+export const fetchUser = () => async (dispatch) => { // redux-thunk allows to receive an function and executes it.
+		const res = await axios.get('/api/profile');
+		console.log('action fetchUser: ', res.data);
 		dispatch({ type: FETCH_USER, payload: res.data });
 };
 	

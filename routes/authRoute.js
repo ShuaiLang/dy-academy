@@ -24,7 +24,7 @@ module.exports = (app, passport) => {
 	// });
 
 	app.post('/api/signup', passport.authenticate('local-signup', {
-            successRedirect : '/api/profile', 
+            successRedirect : '/', 
             failureRedirect : '/signup', 
             failureFlash : true // allow flash messages
         })
@@ -36,7 +36,7 @@ module.exports = (app, passport) => {
 	// });
 
 	app.post('/api/login', passport.authenticate('local-login', {
-			successRedirect: '/api/profile',
+			successRedirect: '/',
 			failureRedirect: '/login',
 			failureFlash: true
 		})
