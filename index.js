@@ -18,12 +18,12 @@ const app = express();
 mongoose.connect(keys.mongoURI);
 require('./services/passport')(passport);
 // app.use weirs up middleware.
-
+app.use('/static', express.static(__dirname + '/assets'));
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
 // let express instance know about cookiesession.
 // app.use( 
 // 	cookieSession({
@@ -43,6 +43,7 @@ app.use(passport.session());
 app.use(flash());
 
 require('./routes/authRoute')(app, passport);
+require('./routes/coursesRoute')(app);
 
 // these lines run in prod mode
 if(process.env.NODE_ENV === 'production') {

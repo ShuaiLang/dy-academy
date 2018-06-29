@@ -7,7 +7,7 @@ import Home from './Home';
 import Signup from './Signup';
 import Login from './Login';
 import Profile from './Profile';
-
+import CoursesBoardContainer from './CoursesBoardContainer/CoursesBoardContainer';
 
 class App extends Component {
 	componentDidMount() {
@@ -19,6 +19,7 @@ class App extends Component {
 				<BrowserRouter>
 					<div>
 						<Route exact path="/" component={Home}/>
+						<Route exact path="/courses" component={CoursesBoardContainer}/>
 						<Route exact path="/signup" component={Signup}/>
 						<Route exact path="/login" component={Login}/>
 						<Route exact path="/profile" component={Profile}/>
