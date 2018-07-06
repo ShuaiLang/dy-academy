@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const CourseBoardContainer = styled.div`
+export const StyledCoursesBoardContainer = styled.div`
 	width: 1152px;
     margin-left: auto;
     margin-right: auto;

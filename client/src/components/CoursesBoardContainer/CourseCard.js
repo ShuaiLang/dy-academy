@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React, { Component } from 'react';
 import { CourseCardContainer, CourseCardTop, CourseCardBanner, CourseCardTags, 
 CourseCardContent, CourseCardName, CourseCardBottom, CourseCardStars,
@@ -15,7 +14,7 @@ const renderTags = (tags) => {
 const renderStars = (stars) => {
 	const list = [];
 	for(let i = 0; i < stars; i++) {
-		list.push((<span></span>));
+		list.push((<span key={i}></span>));
 	}
 	return list;
 }
@@ -46,4 +45,4 @@ const CourseCard = (props) => {
 	);
 }
 
-export default CourseCard
+export default CourseCard;

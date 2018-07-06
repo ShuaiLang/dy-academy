@@ -42,8 +42,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-require('./routes/authRoute')(app, passport);
-require('./routes/coursesRoute')(app);
+require('./routes/authRoutes')(app, passport);
+require('./routes/coursesRoutes')(app);
 
 // these lines run in prod mode
 if(process.env.NODE_ENV === 'production') {

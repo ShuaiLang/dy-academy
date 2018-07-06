@@ -8,7 +8,7 @@ const courseSchema = new Schema({
 	ImgUrl: String,
 	Tags: Array,
 	Stars: Number,
-	Price: Number
+	Price: String
 });
 
 module.exports = mongoose.model('Course', courseSchema);

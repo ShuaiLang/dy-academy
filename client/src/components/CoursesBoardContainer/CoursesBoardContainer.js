@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link, Route } from 'react-router-dom';
 import { fetchAllCourses } from '../../actions';
-import { CourseBoardContainer } from './CourseStyles';
+import { StyledCoursesBoardContainer } from './CourseStyles';
 import { Grid, Row, Col } from 'react-bootstrap';
 import CourseCard from './CourseCard';
-
 
 class CoursesBoardContainer extends Component {
 	componentDidMount() {
@@ -13,21 +13,25 @@ class CoursesBoardContainer extends Component {
 	}
 
 	renderCourses() {
-		console.log('course board: ', this.props.courses);
-		// if(!this.props.courses) return null;
-		// console.log('course board: ', this.props.courses.courses);
+		console.log('render course props: ', this.props);
 		return _.map(this.props.courses, course => {
 			return (
-				<CourseCard course = { course } />
+				<Link key={course.Id} to={`${this.props.location ? this.props.location.pathname : 'courses'}/${course._id}`}>
+					<CourseCard course = { course } />
+				</Link>
 			);
 		});
 	}
 
 	render() {
+		console.log('course board props: ', this.props);
 		return (
-			<CourseBoardContainer>
-				{ this.renderCourses() }
-			</CourseBoardContainer>
+			<div>
+				<StyledCoursesBoardContainer>
+					{ this.renderCourses() }
+				</StyledCoursesBoardContainer>
+
+			</div>
 		);
 	}
 }
