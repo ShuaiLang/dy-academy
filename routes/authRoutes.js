@@ -19,10 +19,6 @@ module.exports = (app, passport) => {
     });
 
     // SIGNUP ==============================
-	// app.get('/signup', (req, res) => {
-	// 	res.render('signup.ejs', { message: req.flash('signupMessage') });
-	// });
-
 	app.post('/api/signup', passport.authenticate('local-signup', {
             successRedirect : '/', 
             failureRedirect : '/signup', 
@@ -31,10 +27,6 @@ module.exports = (app, passport) => {
 	);
 
 	// LOGIN ==============================
-	// app.get('/login', (req, res) => {
-	// 	res.render('login.ejs', { message: req.flash('loginMessage')});
-	// });
-
 	app.post('/api/login', passport.authenticate('local-login', {
 			successRedirect: '/',
 			failureRedirect: '/login',
@@ -42,9 +34,19 @@ module.exports = (app, passport) => {
 		})
 	);
 
-
+	// PROFILE ============================
 	app.get('/api/profile', (req, res) => {
 		res.send(req.user); // lecture 42. passport automatically attach this user to the request body.
+	});
+
+	// PURCHASED COURSE(S) ================
+	app.get('/api/user/purchased', isLoggedIn, function(req, res, next) {
+		res.send(req.user.local.purchasedCourses);
+	});
+
+	// WISHLIST COURSE(S) =================
+	app.get('/api/user/wishlist', isLoggedIn, function(req, res, next) {
+		res.send(req.user.local.wishList);
 	});
 }
 
@@ -52,6 +54,6 @@ module.exports = (app, passport) => {
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated())
         return next();
-
-    res.redirect('/');
-}
+    res.send(null);
+    // res.redirect('/');
+};

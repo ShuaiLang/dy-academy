@@ -1,11 +1,30 @@
-import { FETCH_USER } from '../actions/types';
+import { FETCH_USER, FETCH_PURCHASED_COURSES } from '../actions/types';
 
-export default function(state = null, action) {
-	console.log('auth reducer got action: ', action);
+export const authReducer = (state = {}, action) => {
+	
 	switch (action.type) {
 		case FETCH_USER: 
-			return action.payload || false; // payload will be an empty str if not logged in, no data back from server.
+			console.log('authReducer got FETCH_USER: ', action);
+			return {...state, 
+				loggedIn: action.payload || false
+			}; // payload will be an empty str if not logged in, no data back from server.
+		case FETCH_PURCHASED_COURSES:
+			console.log('authReducer got FETCH_PURCHASED_COURSES: ', action);
+			return {...state,
+				purchasedCourses: action.payload
+			}
 		default: 
 			return state;
 	}
 }
+
+// export const purchasedReducer = (state = null, action) => {
+	
+// 	switch (action.type) {
+// 		case FETCH_PURCHASED_COURSES:
+// 			console.log('purchasedReducer got FETCH_PURCHASED_COURSES: ', action);
+// 			return action.payload || false;
+// 		default:
+// 			return state;
+// 	}
+// }

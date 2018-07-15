@@ -4,14 +4,25 @@ module.exports = (app) => {
 	// get all courses
 	app.get('/api/course/all', function(req, res, next) {
 		Courses.find(function (err, courses) {
-			if(err)
+			if(err) {
+				console.log(err);
 				return next(err);
+			}
 			res.json(courses);
 		});
 	});
 
 	// get single course by ID
 	app.get('/api/course/:id', function(req, res, next) {
+		Courses.findById(req.params.id, function(err, course) {
+			if(err)
+				return next(err);
+			res.json(course);
+		});
+	});
+
+	// get course for instant purchase by ID
+	app.get('/api/course/purchase/:id', function(req, res, next) {
 		Courses.findById(req.params.id, function(err, course) {
 			if(err)
 				return next(err);
@@ -42,4 +53,11 @@ module.exports = (app) => {
 			res.json(course);
 		});
 	});
-}
+};
+
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+
+    res.redirect('/');
+};

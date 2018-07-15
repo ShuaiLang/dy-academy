@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchSingleCourse } from '../../actions';
+import { fetchSingleCourse, cleanSingleCourse } from '../../actions';
 import SingleCourse from './SingleCourse';
 
 class SingleCourseContainer extends Component {
@@ -8,6 +8,7 @@ class SingleCourseContainer extends Component {
 		this.props.fetchSingleCourse(this.props.match.params.courseId);
 	}
 	render() {
+		console.log('rendering');
 		if(this.props.course == null)
 			return (
 				<div>
@@ -20,10 +21,13 @@ class SingleCourseContainer extends Component {
 			);
 		}
 	}
+	componentWillUnmount() {
+		this.props.cleanSingleCourse();
+	}
 }
 
 function mapStateToProps(state) {
-	return { course: state.selectedCourse };
+	return { course: state.courses.selectedCourse };
 }
 
-export default connect(mapStateToProps, { fetchSingleCourse })(SingleCourseContainer);
+export default connect(mapStateToProps, { fetchSingleCourse, cleanSingleCourse })(SingleCourseContainer);

@@ -34,7 +34,7 @@ const CourseCard = (props) => {
 				</CourseCardName>
 				<CourseCardBottom>
 					<CourseCardPrice>
-						{ props.course.Price }
+						￥{ props.course.Price }
 					</CourseCardPrice>
 					<CourseCardStars>
 						{ renderStars(props.course.Stars) }

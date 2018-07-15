@@ -25,7 +25,6 @@ class HeaderContainer extends Component {
 	}
 }
 function mapStateToProps({ auth }) {
-	console.log('HeaderContainer: ', auth);
-	return { auth };
+	return { auth: auth.loggedIn };
 }
 export default connect(mapStateToProps)(HeaderContainer);

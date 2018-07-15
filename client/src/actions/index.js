@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { FETCH_USER, FETCH_ALL_COURSES, FETCH_SINGLE_COURSE } from './types';
+import { FETCH_USER, FETCH_ALL_COURSES, FETCH_SINGLE_COURSE, CLEAN_SINGLE_COURSE, FETCH_PURCHASED_COURSES } from './types';
 
 export const fetchUser = () => async (dispatch) => { // redux-thunk allows to receive an function and executes it.
 	const res = await axios.get('/api/profile');
@@ -16,6 +16,16 @@ export const fetchSingleCourse = (courseId) => async (dispatch) => {
 	const res = await axios.get(`/api/course/${courseId}`);
 	dispatch({ type: FETCH_SINGLE_COURSE, payload: res.data });
 };
+
+export const cleanSingleCourse = () => (dispatch) => {
+	dispatch({ type: CLEAN_SINGLE_COURSE, payload: null});
+}
+
+export const fetchPurchasedCourses = () => async (dispatch) => {
+	const res = await axios.get('/api/user/purchased');
+	console.log('fetchPurchasedCourses: ', res);
+	dispatch({ type: FETCH_PURCHASED_COURSES, payload: res.data });
+}
 	
 // relative path; use proxy in package.json (dev mode)
 // But in production mode, there'll be no create-react server, nor proxy.

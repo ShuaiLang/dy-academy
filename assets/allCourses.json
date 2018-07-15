@@ -13,7 +13,7 @@
 			"Id": "02",
 			"Name": "Cinematography",
 			"Description": "Cinematography Descriptions",
-			"ImgUrl": "static/images/Cinematography.jpg",
+			"ImgUrl": "static/images/cinematography.jpg",
 			"Tags": [ "Cinematography", "film"],
 			"Stars": "5",
 			"Price": "￥298"

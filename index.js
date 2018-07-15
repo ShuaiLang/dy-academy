@@ -32,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // 	})
 // );
 app.use(session({
-    secret: 'ilovescotchscotchyscotchscotch', // session secret
+    secret: keys.sessionKey, // session secret
     resave: true,
     saveUninitialized: true
 }));
@@ -44,6 +44,7 @@ app.use(flash());
 
 require('./routes/authRoutes')(app, passport);
 require('./routes/coursesRoutes')(app);
+require('./routes/paymentRoutes')(app);
 
 // these lines run in prod mode
 if(process.env.NODE_ENV === 'production') {
@@ -62,3 +63,7 @@ if(process.env.NODE_ENV === 'production') {
 //Look in the underlying environment and find the port to listen to.
 const PORT = process.env.PORT || 5000; //5000 if in dev env or own machine.
 app.listen(PORT);
+
+process.on('uncaughtException', function (err) {
+    console.log(err);
+}); 

@@ -37,7 +37,7 @@ class CoursesBoardContainer extends Component {
 }
 
 function mapStateToProps(state) {
-	return { courses: state.courses }
+	return { courses: state.courses.allCourses }
 }
 
 export default connect(mapStateToProps, { fetchAllCourses })(CoursesBoardContainer);
