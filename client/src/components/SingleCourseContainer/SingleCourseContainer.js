@@ -8,7 +8,6 @@ class SingleCourseContainer extends Component {
 		this.props.fetchSingleCourse(this.props.match.params.courseId);
 	}
 	render() {
-		console.log('rendering');
 		if(this.props.course == null)
 			return (
 				<div>
