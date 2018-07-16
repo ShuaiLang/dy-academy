@@ -5,7 +5,7 @@ const AlipaySdkConfig = {
 	appId: keys.alipayAppId,
 	notifyUrl: 'http://localhost:3000/api/alipay/notify',
 	return_url: 'http://localhost:3000/api/alipay/callback',
-	rsaPrivate: keys.alipayPrivateKey,
+	rsaPrivate: keys.alipayPrivateKey, //dynamic path/key
 	rsaPublic: keys.alipayPublicKey,
 	// rsaPrivate: path.resolve('./config/alipay-private.pem'),
 	// rsaPublic:  path.resolve('./config/alipay-public.pem'),
