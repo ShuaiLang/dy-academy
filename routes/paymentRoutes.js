@@ -3,9 +3,7 @@ const path = require('path');
 const Courses = require('../models/course');
 const User = require('../models/user');
 
-const notify_url = `${process.env.NODE_ENV === "production" 
-	? 'https://shielded-shelf-96177.herokuapp.com/'
-	: 'http://localhost:3000'}/api/alipay_notify`;
+const notify_url = 'https://shielded-shelf-96177.herokuapp.com/api/alipay_notify';
 
 const return_url = `${process.env.NODE_ENV === "production" 
 	? 'https://shielded-shelf-96177.herokuapp.com/'
@@ -20,6 +18,10 @@ const AlipaySdkConfig = {
 	signType: 'RSA2'
 };
 
+const alipay_gate_way = 'https://openapi.alipay.com/gateway.do';
+const alipay_gate_way_sandbox = 'https://openapi.alipaydev.com/gateway.do';
+
+
 const Alipay = require('alipay-node-sdk');
 const ali = new Alipay(AlipaySdkConfig);
 let outTradeId = Date.now().toString();
@@ -32,31 +34,30 @@ module.exports = (app) => {
 		res.send(user);
 	});
 	
-	app.get('/api/mongo/:userId/:courseId', (req, res) => {
-		User.findById(req.params.userId, async 	(err, user) => {
-			if(err)
-				console.log('mongo query err: ', err);
-			else {
-				// console.log("user: ", user.local);
-				user.local.purchasedCourses = Array.from(new Set([...user.local.purchasedCourses, req.params.courseId]));
-				const newUser = await user.save();
-				res.send(user);
-			}
-		});
-	});
+	// app.get('/api/mongo/:userId/:courseId', (req, res) => {
+	// 	User.findById(req.params.userId, async 	(err, user) => {
+	// 		if(err)
+	// 			console.log('mongo query err: ', err);
+	// 		else {
+	// 			// console.log("user: ", user.local);
+	// 			user.local.purchasedCourses = Array.from(new Set([...user.local.purchasedCourses, req.params.courseId]));
+	// 			const newUser = await user.save();
+	// 			res.send(user);
+	// 		}
+	// 	});
+	// });
 	
 	// instant purchase
 	app.get('/api/alipay/:id', isLoggedIn, async (req, res) => {
 		// get course data 
-		console.log('req.user: ', req.user);
-		// console.log('ali object: ', ali);
-		console.log('return url: ', return_url);
 		const courseData = await getCourseData(req.params.id);
 		// console.log(`course data : ${courseData}`);
 		const params = await generateInstantPaymentParams(courseData, outTradeId, req.user._id);
 		// console.log(`params: ${params}`);
-		if(params)
-			res.redirect(params);
+		const redirect_url = (AlipaySdkConfig.sandbox ? alipay_gate_way_sandbox : alipay_gate_way) + '?' + params;
+		if(params) {
+			res.redirect(redirect_url);
+		}
 		
 	});
 
@@ -80,8 +81,10 @@ module.exports = (app) => {
 		    //签名校验
 		    var ok = ali.signVerify(ret.json());
 		    console.log('Ali query: ', ok);
+		    res.json(ret.body);
 		});
-		res.send(ret.body);
+		
+
 		
 	});
 
