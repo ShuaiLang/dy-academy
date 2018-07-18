@@ -3,19 +3,15 @@ const path = require('path');
 const Courses = require('../models/course');
 const AlipaySdkConfig = {
 	appId: keys.alipayAppId,
-	notifyUrl: 'http://localhost:3000/api/alipay/notify',
-	return_url: 'http://localhost:3000/api/alipay/callback',
-	rsaPrivate: keys.alipayPrivateKey, //dynamic path/key
-	rsaPublic: keys.alipayPublicKey,
-	// rsaPrivate: path.resolve('./config/alipay-private.pem'),
-	// rsaPublic:  path.resolve('./config/alipay-public.pem'),
+	notifyUrl: 'http://localhost:3000/api/alipay_notify',
+	rsaPrivate: path.resolve('./config/alipay-private.pem'),
+	rsaPublic: path.resolve('./config/alipay-public.pem'),
 	sandbox: true,
-	signType: 'RSA'
-}
+	signType: 'RSA2'
+};
 
 const Alipay = require('alipay-node-sdk');
 const ali = new Alipay(AlipaySdkConfig);
-// /api/alipay/5b3aa9e5fb6fc03328f87349
 
 module.exports = (app) => {
 	// instant purchase
@@ -27,68 +23,63 @@ module.exports = (app) => {
 
 	app.get('/api/alipay/:id', isLoggedIn, async (req, res) => {
 		// get course data 
+		// console.log('ali object: ', ali);
 		const courseData = await getCourseData(req.params.id);
-		console.log("courseData: ", courseData);
+		// console.log(`course data : ${courseData}`);
 		const params = await generateInstantPaymentParams(courseData);
-		console.log(`params: ${params}`);
+		// console.log(`params: ${params}`);
 		if(params)
 			res.redirect(params);
+		// 验签
+		// 打印执行日志
 
-
-		// let outTradeId = Date.now().toString();
-		// const charge = ali.pagePay({
-		//     subject: '测试商品',
-		//     body: '测试商品描述',
-		//     outTradeId: outTradeId,
-		//     timeout: '10m',
-		//     amount: '10.00',
-		//     goodsType: '0',
-		//     qrPayMode: 2
-		// });
-
-		// console.log(charge);
-		// res.redirect(charge);
-
-		// const charge = await AlipaySdk('alipay.trade.page.pay', {
-		// 	biz_content: {
-		// 		out_trade_no: '20150320010101001',
-		// 		subject: 'Iphone6 16G',
-		// 		body: 'Iphone6 16G',
-		// 		total_amount: 88.88
-		//     },
-		// }, {
-		// 	// 验签
-		// 	validateSign: true,
-		// 	// 打印执行日志
-		// 	log: this.logger,
-		// })
+		// response handler
+		
 	});
 
-	app.get('/api/alipay/callback', (req, res) => {
-		res.send({"payment" : 'ok'});
+	app.get('/api/test', (req, res) => {
+		res.send(req.query);
+	})
+
+	app.get('/api/alipay_return', (req, res) => {
+		console.log('alipay 响应报文: ', req.query);
+		let response = ali.signVerify(req.query);
+		if (response === false) {
+			return res.error("return 回调签名验证未通过");
+		}
+		res.send(response);
+		
+	});
+
+	//支付宝异步通知，必须是公网地址，否则收不到反馈。
+	// 支付结果必须以notify_url得到的信息为准，否则会有掉单可能。
+	// 加入更新数据库逻辑
+	app.post('/api/alipay_notify', (req, res) => {
+
+		let response = ali.signVerify(req.body);
+		if (response === false) {
+			return res.error("fail");
+		}
+		res.send('success');
+		// console.log('notify', response);
 	});
 }
 
 function isLoggedIn(req, res, next) {
     if(!req.user) {
 		// stop the middleware chain right here, otherwise more error.
-		return res.status(403).send({ error: 'You must log in!'});
+		// return res.status(403).redirect('./');//.send({ error: 'You must log in!'});
+		res.redirect('/login');
 	}
 	console.log('require login: logged in');
 	next();
 };
 
 function getCourseData(courseId) {
-	//let courseData = null;
-	return Courses.findById(courseId, (err, course) => {
-		if(err) {
-			console.log(`Error in instantPayment: ${err}`);
-			return false;
-		}
-		// console.log("course: ", course);
-		// courseData = course;
-	});
-}
+	var promise = Courses.findById(courseId).exec();
+	console.log('promise: ', promise);
+	return promise;
+};
 
 function generateInstantPaymentParams(Item) {
 	let outTradeId = Date.now().toString();
@@ -100,7 +91,8 @@ function generateInstantPaymentParams(Item) {
 	    timeout: '10m',
 	    amount: Item.Price,
 	    goodsType: '0',
-	    qrPayMode: 2
+	    qrPayMode: 2,
+	    return_url: 'http://localhost:3000/api/alipay_return'
 	});
 	return charge;
-}
+};

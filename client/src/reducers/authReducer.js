@@ -6,7 +6,7 @@ export const authReducer = (state = {}, action) => {
 		case FETCH_USER: 
 			console.log('authReducer got FETCH_USER: ', action);
 			return {...state, 
-				loggedIn: action.payload || false
+				loggedIn: action.payload.local || false
 			}; // payload will be an empty str if not logged in, no data back from server.
 		case FETCH_PURCHASED_COURSES:
 			console.log('authReducer got FETCH_PURCHASED_COURSES: ', action);

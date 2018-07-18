@@ -1,41 +1,22 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { fetchPurchasedCourses, cleanSingleCourse } from '../../actions';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-class SingleCourse extends Component {
-	componentDidMount() {
-		this.props.fetchPurchasedCourses();
-	}
+const SingleCourse = (props) => {
+	const { course } = props;
+	const { purchased } = props;
 
-	// componentWillUnmount() {
-	// 	this.props.cleanSingleCourse();
-	// }
-
-	verifyPurchase(purchased) {
-		if(this.props.purchased) {
-			console.log('got purchased data: ', this.props.purchased);
-			for(let i of this.props.purchased) {
-				if(i === this.props.course._id)
-					return true;
+	return (
+		<div>
+			<h1>{ course.Name }</h1>
+			<p>{ course.Description }</p>
+			{ 
+				purchased ? 
+					<Link to={`/watch/${course.Name}`}>Watch</Link>
+					: 
+					<a href={`/api/alipay/${course._id}`}>Purchase Right Now</a>
 			}
-		}
-		return false;
-	}
-
-	render() {
-		const { course } = this.props;
-		return (
-			<div>
-				<h1>{ course.Name }</h1>
-				<p>{ course.Description }</p>
-				{ this.verifyPurchase(this.props.purchased) ? <p>purchased</p> : <p>not purchased</p> }
-			</div>
-		);
-	}
+		</div>
+	);
 };
 
-function mapStateToProps(state) {
-	return { purchased: state.auth.purchasedCourses };
-}
-
-export default connect(mapStateToProps, { fetchPurchasedCourses, cleanSingleCourse })(SingleCourse);
+export default SingleCourse;
