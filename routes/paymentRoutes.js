@@ -6,7 +6,7 @@ const User = require('../models/user');
 const notify_url = 'https://shielded-shelf-96177.herokuapp.com/api/alipay_notify';
 
 const return_url = `${process.env.NODE_ENV === "production" 
-	? 'https://shielded-shelf-96177.herokuapp.com/'
+	? 'https://shielded-shelf-96177.herokuapp.com'
 	: 'http://localhost:3000'}/api/alipay_return`;
 
 const AlipaySdkConfig = {
@@ -62,9 +62,9 @@ module.exports = (app) => {
 	});
 
 	// look at query
-	app.get('/api/test', (req, res) => {
-		res.send(req.query);
-	});
+	// app.get('/api/test', (req, res) => {
+	// 	res.send(req.query);
+	// });
 
 	app.get('/api/alipay_return', async (req, res) => {
 		console.log('alipay 响应报文: ', req.query);
@@ -81,11 +81,8 @@ module.exports = (app) => {
 		    //签名校验
 		    var ok = ali.signVerify(ret.json());
 		    console.log('Ali query: ', ok);
-		    res.json(ret.body);
+		    res.send(ret.body);
 		});
-		
-
-		
 	});
 
 	//支付宝异步通知，必须是公网地址，否则收不到反馈。
@@ -97,23 +94,24 @@ module.exports = (app) => {
 		if (response === false) {
 			return res.error("fail");
 		} else {
-			if(req.body.trade_status === 'TRADE_SUCCESS') {
-				const params = JSON.parse(req.body.passbackParams);
-				const userId = params.userId;
-				const courseId = params.courseId;
+			console.log(req.body);
+			// if(req.body.alipay_trade_query_response.trade_status === 'TRADE_SUCCESS') {
+			// 	const params = JSON.parse(req.body.passbackParams);
+			// 	const userId = params.userId;
+			// 	const courseId = params.courseId;
 				
-				User.findById(userId, async (err, user) => {
-					if(err)
-						console.log('mongo query err: ', err);
-					else {
-						// console.log("user: ", user.local);
-						user.local.purchasedCourses = Array.from(new Set([...user.local.purchasedCourses, courseId]));
-						const newUser = await user.save();
-						console.log(newUser);
-					}
-				});
-				res.send('success');
-			}
+			// 	User.findById(userId, async (err, user) => {
+			// 		if(err)
+			// 			console.log('mongo query err: ', err);
+			// 		else {
+			// 			// console.log("user: ", user.local);
+			// 			user.local.purchasedCourses = Array.from(new Set([...user.local.purchasedCourses, courseId]));
+			// 			const newUser = await user.save();
+			// 			console.log('success');
+			// 		}
+			// 	});
+			// 	res.send('success');
+			// }
 		}
 
 		res.send('success');
