@@ -90,13 +90,14 @@ module.exports = (app) => {
 	// 加入更新数据库逻辑
 	app.post('/api/alipay_notify', async (req, res) => {
 		console.log('NOTIFY');
+		console.log()
 		let response = ali.signVerify(req.body);
 		console.log('respons: ', response);
 		if (response === false) {
 			console.log('sign verify fails!');
 			return res.error("fail");
 		} else {
-			const params = JSON.parse(req.body.passbackParams);
+			const params = JSON.parse(req.body.passback_params);
 			console.log('params: ', params);
 			const userId = params.userId;
 			const courseId = params.courseId;
