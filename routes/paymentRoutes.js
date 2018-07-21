@@ -89,33 +89,30 @@ module.exports = (app) => {
 	// 支付结果必须以notify_url得到的信息为准，否则会有掉单可能。
 	// 加入更新数据库逻辑
 	app.post('/api/alipay_notify', async (req, res) => {
-
+		console.log('NOTIFY');
 		let response = ali.signVerify(req.body);
+		console.log('respons: ', response);
 		if (response === false) {
+			console.log('sign verify fails!');
 			return res.error("fail");
 		} else {
-			console.log(req.body);
-			// if(req.body.alipay_trade_query_response.trade_status === 'TRADE_SUCCESS') {
-			// 	const params = JSON.parse(req.body.passbackParams);
-			// 	const userId = params.userId;
-			// 	const courseId = params.courseId;
-				
-			// 	User.findById(userId, async (err, user) => {
-			// 		if(err)
-			// 			console.log('mongo query err: ', err);
-			// 		else {
-			// 			// console.log("user: ", user.local);
-			// 			user.local.purchasedCourses = Array.from(new Set([...user.local.purchasedCourses, courseId]));
-			// 			const newUser = await user.save();
-			// 			console.log('success');
-			// 		}
-			// 	});
-			// 	res.send('success');
-			// }
+			const params = JSON.parse(req.body.passbackParams);
+			console.log('params: ', params);
+			const userId = params.userId;
+			const courseId = params.courseId;
+			
+			User.findById(userId, async (err, user) => {
+				if(err)
+					console.log('mongo query err: ', err);
+				else {
+					// console.log("user: ", user.local);
+					user.local.purchasedCourses = Array.from(new Set([...user.local.purchasedCourses, courseId]));
+					const newUser = await user.save();
+					console.log('success');
+				}
+			});
+			res.send('success');
 		}
-
-		res.send('success');
-		// console.log('notify', response);
 	});
 }
 
