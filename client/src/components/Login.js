@@ -7,21 +7,21 @@ class Login extends Component {
 	render() {
 		return (
 			<div>
-				<h1><span class="fa fa-sign-in"></span> Login</h1>
+				<h1><span className="fa fa-sign-in"></span> Login</h1>
 
-				<div class="alert alert-danger"></div>
+				<div className="alert alert-danger"></div>
 
 				<form action="/api/login" method="post">
-					<div class="form-group">
+					<div className="form-group">
 					    <label>Email</label>
-					    <input type="text" class="form-control" name="email"/>
+					    <input type="text" className="form-control" name="email"/>
 					</div>
-					<div class="form-group">
+					<div className="form-group">
 					    <label>Password</label>
-					    <input type="password" class="form-control" name="password"/>
+					    <input type="password" className="form-control" name="password"/>
 					</div>
 
-					<button type="submit" class="btn btn-warning btn-lg">Log in</button>
+					<button type="submit" className="btn btn-warning btn-lg">Log in</button>
 				</form>
 
 				<hr/>

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 // import { connect } from 'react-redux';
-import { BrowserRouter, Link, Route } from 'react-router-dom';
+// import { BrowserRouter, Link, Route } from 'react-router-dom';
 import HeaderContainer from './HeaderContainer/HeaderContainer';
 import CoursesBoardContainer from './CoursesBoardContainer/CoursesBoardContainer';
-import SingleCourseContainer from './SingleCourseContainer/SingleCourseContainer';
+// import SingleCourseContainer from './SingleCourseContainer/SingleCourseContainer';
 class Home extends Component {
 
 	render() {

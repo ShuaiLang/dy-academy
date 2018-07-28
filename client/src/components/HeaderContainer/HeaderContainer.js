@@ -6,25 +6,23 @@ import Header from './Header/Header';
 
 class HeaderContainer extends Component {
 	getUserStatus() {
-		switch (this.props.auth) {
-			case null:
-				return;
+		switch (this.props.user) {
 			case false:
 				return false;
 			default:
-				return this.props.auth;
+				return this.props.user;
 		}
 	}
 	render() {
 		if(this.getUserStatus() != null) {
 			return (
-				<Header auth={ this.getUserStatus() }/>
+				<Header user={ this.getUserStatus() }/>
 			);
 		}
 		return null;
 	}
 }
-function mapStateToProps({ auth }) {
-	return { auth: auth.loggedIn };
+function mapStateToProps(state) {
+	return { user: state.user.loggedInUser };
 }
 export default connect(mapStateToProps)(HeaderContainer);

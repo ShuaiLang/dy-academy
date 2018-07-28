@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { CourseCardContainer, CourseCardTop, CourseCardBanner, CourseCardTags, 
 CourseCardContent, CourseCardName, CourseCardBottom, CourseCardStars,
 CourseCardPrice } from './CourseStyles';

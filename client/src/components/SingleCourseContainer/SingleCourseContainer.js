@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchSingleCourse, cleanSingleCourse, fetchPurchasedCourses } from '../../actions';
+import HeaderContainer from '../HeaderContainer/HeaderContainer';
+import { fetchSingleCourse, cleanSingleCourse, fetchPurchasedCourses, addToCart } from '../../actions';
 import SingleCourse from './SingleCourse';
 
 class SingleCourseContainer extends Component {
 	componentDidMount() {
 		this.props.fetchSingleCourse(this.props.match.params.courseId);
-		this.props.fetchPurchasedCourses();
 	}
 
-	verifyPurchase(purchased) {
-		if(this.props.purchased) {
-			console.log('got purchased data: ', this.props.purchased);
-			for(let i of this.props.purchased) {
-				if(i === this.props.course._id)
+	verify(ids, id) {
+		if(ids) {
+			console.log('got purchased data: ', ids);
+			for(let i of ids) {
+				if(i === id)
 					return true;
 			}
 		}
@@ -29,27 +29,37 @@ class SingleCourseContainer extends Component {
 			);
 		else {
 			return (
-				<SingleCourse 
-					course = {this.props.course} 
-					purchased = {this.verifyPurchase(this.props.purchased)}
-				/>
+				<div>
+					<HeaderContainer />
+					<SingleCourse 
+						course = {this.props.course} 
+						isPurchased = {this.verify(this.props.purchasedCourses, this.props.course._id)}
+						isInCart = {this.verify(this.props.shoppingCart, this.props.course._id)}
+						user = {this.props.user}
+						addToCart = {this.props.addToCart}
+					/>
+				</div>
 			);
 		}
 	}
 	componentWillUnmount() {
+		console.log('singlecourse unmounting.');
 		this.props.cleanSingleCourse();
 	}
 }
 
 function mapStateToProps(state) {
 	return { 
+		user: state.user.loggedInUser,
 		course: state.courses.selectedCourse,
-		purchased: state.auth.purchasedCourses 
+		purchasedCourses: state.user.loggedInUser ? state.user.loggedInUser.purchasedCourses : null,
+		shoppingCart: state.user.loggedInUser ? state.user.loggedInUser.shoppingCart : null
 	};
 }
 
 export default connect(mapStateToProps, { 
 	fetchSingleCourse, 
 	cleanSingleCourse, 
-	fetchPurchasedCourses 
+	fetchPurchasedCourses,
+	addToCart
 })(SingleCourseContainer);

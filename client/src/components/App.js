@@ -7,9 +7,9 @@ import Home from './Home';
 import Signup from './Signup';
 import Login from './Login';
 import Profile from './Profile';
-import CoursesBoardContainer from './CoursesBoardContainer/CoursesBoardContainer';
 import SingleCourseContainer from './SingleCourseContainer/SingleCourseContainer';
 import AllCoursesContainer from './AllCoursesContainer/AllCoursesContainer';
+import ShoppingCartContainer from './ShoppingCartContainer/ShoppingCartContainer';
 
 class App extends Component {
 	componentDidMount() {
@@ -23,6 +23,7 @@ class App extends Component {
 						<Route exact path="/" component={Home}/>
 						<Route exact path="/courses" component={AllCoursesContainer}/>
 						<Route exact path="/courses/:courseId" component={SingleCourseContainer} />
+						<Route exact path="/courses/checkout/:courseId" component={ShoppingCartContainer} />
 						<Route exact path="/signup" component={Signup}/>
 						<Route exact path="/login" component={Login}/>
 						<Route exact path="/profile" component={Profile}/>

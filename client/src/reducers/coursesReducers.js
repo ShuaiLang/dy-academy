@@ -1,4 +1,4 @@
-import { FETCH_ALL_COURSES, FETCH_SINGLE_COURSE, CLEAN_SINGLE_COURSE } from '../actions/types';
+import { FETCH_ALL_COURSES, FETCH_SINGLE_COURSE, CLEAN_SINGLE_COURSE, ADD_TO_CART } from '../actions/types';
 
 export const courseReducer = (state = {}, action) => {
 	

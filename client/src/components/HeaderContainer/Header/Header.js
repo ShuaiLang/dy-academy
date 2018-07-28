@@ -13,7 +13,7 @@ const NavWrapper = styled.div`
 `;
 
 const Header = (props) => {
-	// console.log('rendering Header, auth: ', props.auth);
+	console.log('rendering Header, user: ', props.user);
 	return (
 		<NavWrapper>
 		<Navbar inverse collapseOnSelect>
@@ -36,10 +36,10 @@ const Header = (props) => {
 						<MenuItem eventKey={3.3}>Separated link</MenuItem>
 					</NavDropdown>
 				</Nav>
-					{props.auth ? (
+					{props.user ? (
 							<Nav pullRight>
 								<NavItem eventKey={1} href="/api/profile">
-									<Button bsStyle="primary">{props.auth.email}</Button>
+									<Button bsStyle="primary">{props.user.email}</Button>
 								</NavItem>
 								<NavItem eventKey={2} href="/api/logout">
 									<Button bsStyle="primary">登出</Button>

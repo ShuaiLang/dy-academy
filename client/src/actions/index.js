@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { FETCH_USER, FETCH_ALL_COURSES, FETCH_SINGLE_COURSE, CLEAN_SINGLE_COURSE, FETCH_PURCHASED_COURSES } from './types';
+import { FETCH_USER, FETCH_ALL_COURSES, FETCH_SINGLE_COURSE, CLEAN_SINGLE_COURSE, FETCH_PURCHASED_COURSES, 
+ADD_TO_CART } from './types';
 
 export const fetchUser = () => async (dispatch) => { // redux-thunk allows to receive an function and executes it.
 	const res = await axios.get('/api/profile');
@@ -25,6 +26,20 @@ export const fetchPurchasedCourses = () => async (dispatch) => {
 	const res = await axios.get('/api/user/purchased');
 	console.log('fetchPurchasedCourses: ', res);
 	dispatch({ type: FETCH_PURCHASED_COURSES, payload: res.data });
+}
+
+// export const fetchShoppingCart = () 
+export const addToCart = (user, courseId) => async (dispatch) => {
+	console.log('addtocart action');
+	const res = await axios.post('/api/user/addtocart', {
+		user: user,
+		item: courseId
+	});
+	if(res) {
+		console.log('addToCart receives: ', res);
+		dispatch({ type: ADD_TO_CART, payload: res.data });
+	}
+	
 }
 	
 // relative path; use proxy in package.json (dev mode)

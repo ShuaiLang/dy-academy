@@ -3,12 +3,13 @@ const bcrypt = require('bcrypt-nodejs');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-	local: {
+	// local: {
     	email:{ type: String, required: true },
     	password:{ type: String, required: true },
+    	shoppingCart: { type: Array },
     	purchasedCourses: { type: Array },
     	wishList: { type: Array }
-    }
+    // }
 });
 
 
@@ -19,7 +20,7 @@ userSchema.methods.encryptPassword = function(password){
 
 
 userSchema.methods.validPassword = function(password){
-    return bcrypt.compareSync(password, this.local.password);
+    return bcrypt.compareSync(password, this.password);
 };
 
 
