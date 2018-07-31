@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import HeaderContainer from '../HeaderContainer/HeaderContainer';
-import { fetchSingleCourse, cleanSingleCourse, fetchPurchasedCourses, addToCart } from '../../actions';
+import { fetchSingleCourse, cleanSingleCourse, fetchPurchasedCourses, addToCart, addToAnonymousCart } from '../../actions';
 import SingleCourse from './SingleCourse';
 
 class SingleCourseContainer extends Component {
@@ -37,6 +37,7 @@ class SingleCourseContainer extends Component {
 						isInCart = {this.verify(this.props.shoppingCart, this.props.course._id)}
 						user = {this.props.user}
 						addToCart = {this.props.addToCart}
+						addToAnonymousCart = {this.props.addToAnonymousCart}
 					/>
 				</div>
 			);
@@ -61,5 +62,6 @@ export default connect(mapStateToProps, {
 	fetchSingleCourse, 
 	cleanSingleCourse, 
 	fetchPurchasedCourses,
-	addToCart
+	addToCart,
+	addToAnonymousCart
 })(SingleCourseContainer);

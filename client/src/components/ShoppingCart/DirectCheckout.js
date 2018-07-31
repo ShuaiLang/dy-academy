@@ -1,8 +1,8 @@
 import React from 'react';
 import { ShoppingCartWrapper, ShoppingCartHeader, ShoppingCartBody, ShoppingCartTitle, ShoppingCartList, ShoppingCartItem,
 ShoppingCartImg, ShoppingCartItemName, ShoppingCartItemPrice, CheckoutBox, TotalPrice, TotalText, CheckoutButton } from './ShoppingCartStyles';
-import { Link } from 'react-router-dom';
-const ShoppingCart = (props) => {
+
+const DirectCheckout = (props) => {
 	const { item } = props;
 	return (
 		<ShoppingCartWrapper>
@@ -44,4 +44,4 @@ const ShoppingCart = (props) => {
 	);
 }
 
-export default ShoppingCart;
+export default DirectCheckout;

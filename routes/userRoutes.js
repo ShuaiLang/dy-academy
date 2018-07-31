@@ -34,11 +34,13 @@ module.exports = (app, passport) => {
     	res.send(req.isAuthenticated());
     });
 
-	app.post('/api/user/addtocart', redirectIfNotLoggedIn, (req, res) => {
-		console.log('addtocart route got: ', req.body.item, req.body.user);
-		const item = req.body.item;
-		const user = req.body.user;
-		User.findById(user._id, async(err, user) => {
+    // ADD TO CART =============================
+    // DON'T FORGET TO REDIRECT TO LOGIN 
+	app.get('/api/user/addtocart/:courseId', (req, res) => {
+		console.log('addtocart route got: ', req.params.courseId);
+		const item = req.params.courseId;
+		const user = req.user;
+		User.findById(user._id, async (err, user) => {
 			if(err) {
 				console.log('mongo query err find user: ', err);
 				res.send(false);
@@ -52,17 +54,51 @@ module.exports = (app, passport) => {
 		})
 	});
 
-	// app.post('/api/user/addtocart', (req, res) => {
-	// 	if(!req.user) {
-	// 		console.log('not logged in!!');
-	// 		res.redirect(307, '/login');
-	// 	} else {
-	// 		console.log('going to next');
-	// 		next();
-	// 	}
-	// }, (req, res) => {
-	// 	console.log('is logged in! next!!');
-	// });
+	// UPDATE SHOPPING CART FROM ANONYMOUS ========================
+	app.post('/api/user/update_from_anonymous', (req, res) => {
+		console.log(req.body.items);
+		if(req.user) {
+			User.findById(req.user._id, async (err, user) => {
+				if(err) {
+					console.log(err);
+				} else {
+					user.shoppingCart = Array.from(new Set([...user.shoppingCart, ...req.body.items]));
+					const newUser = await user.save();
+					console.log('adding course from anonymous cart success!!!');
+					res.send(user.shoppingCart);
+				}
+			});
+		} else {
+			res.send(false);
+		}
+	});
+
+	// GET SHOPPING CART ========================
+	app.get('/api/user/shopping-cart', redirectIfNotLoggedIn, (req, res) => {
+		res.send(req.user.shoppingCart);
+	});
+
+	// REMOVE FROM CART ========================
+	app.get('/api/user/shopping-cart/remove/:id', (req, res) => {
+		if(req.user.shoppingCart.includes(req.params.id.toString())) {
+			User.findById(req.user._id, async (err, user) => {
+				if(err)
+					console.log(err);
+				else {
+					var index = user.shoppingCart.indexOf(req.params.id);
+					if(index > -1) {
+						user.shoppingCart.splice(index, 1);
+						await user.save();
+						console.log(`removed ${req.params.id} from cart!!`);
+						res.send(user.shoppingCart);
+					}
+				}
+			});
+		} else
+			res.send(false);
+	});
+
+	
 
 	// PURCHASED COURSE(S) ================
 	app.get('/api/user/purchased', function(req, res, next) {

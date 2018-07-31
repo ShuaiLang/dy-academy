@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchSingleCourse, cleanSingleCourse } from '../../actions';
-import ShoppingCart from './ShoppingCart';
+import DirectCheckout from './DirectCheckout';
 
-class CheckoutContainer extends Component {
+class DirectCheckoutContainer extends Component {
 
 	componentDidMount() {
 		// grab course id from match.params
 		this.props.fetchSingleCourse(this.props.match.params.courseId);
 	}
+
+	componentWillUnmount() {
+		console.log('singlecourse unmounting.');
+		this.props.cleanSingleCourse();
+	}
+	
 	render() {
 		if(this.props.course == null)
 			return (
@@ -18,10 +24,11 @@ class CheckoutContainer extends Component {
 			);
 		else
 			return (
-				<ShoppingCart item = { this.props.course } />
+				<DirectCheckout item = { this.props.course } />
 			);
 	}
 
+	
 	// checkout from single course page:
 
 }
@@ -33,4 +40,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
 	fetchSingleCourse, 
 	cleanSingleCourse 
-})(CheckoutContainer);
+})(DirectCheckoutContainer);

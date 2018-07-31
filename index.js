@@ -42,7 +42,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-require('./routes/authRoutes')(app, passport);
+require('./routes/userRoutes')(app, passport);
 require('./routes/coursesRoutes')(app);
 require('./routes/paymentRoutes')(app);
 

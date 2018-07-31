@@ -9,11 +9,15 @@ import Login from './Login';
 import Profile from './Profile';
 import SingleCourseContainer from './SingleCourseContainer/SingleCourseContainer';
 import AllCoursesContainer from './AllCoursesContainer/AllCoursesContainer';
-import ShoppingCartContainer from './ShoppingCartContainer/ShoppingCartContainer';
+import DirectCheckoutContainer from './ShoppingCart/DirectCheckoutContainer';
 
 class App extends Component {
 	componentDidMount() {
 		this.props.fetchUser();
+		console.log('App tempShoppingCart', this.props.tempShoppingCart);
+		if(this.props.tempShoppingCart.length > 0) {
+			this.props.updateUserShoppingCartFromAnonymous(this.props.tempShoppingCart);
+		}
 	}
 	render() {
 		return (
@@ -23,7 +27,7 @@ class App extends Component {
 						<Route exact path="/" component={Home}/>
 						<Route exact path="/courses" component={AllCoursesContainer}/>
 						<Route exact path="/courses/:courseId" component={SingleCourseContainer} />
-						<Route exact path="/courses/checkout/:courseId" component={ShoppingCartContainer} />
+						<Route exact path="/courses/checkout/:courseId" component={DirectCheckoutContainer} />
 						<Route exact path="/signup" component={Signup}/>
 						<Route exact path="/login" component={Login}/>
 						<Route exact path="/profile" component={Profile}/>
@@ -34,4 +38,10 @@ class App extends Component {
 	}
 };
 
-export default connect(null, actions)(App);
+function mapStateToProps(state) {
+	return {
+		tempShoppingCart: state.user.anonymousUser.tempShoppingCart
+	};
+}
+
+export default connect(mapStateToProps, actions)(App);
